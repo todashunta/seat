@@ -1,0 +1,10 @@
+:root {
+    --seat-width: 100px;
+    --seat-height: 100px;
+    --background-mode: white;
+}
+
+.draw-area-td {
+    width: var(--seat-width);
+    height: var(--seat-height);
+}

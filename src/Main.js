@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { SeatContext } from "./Seat";
 import { inputDataContext } from "./Seat";
+import "./scss/seat.scss";
 
 function Main() {
     return (
@@ -23,31 +24,57 @@ function TeacherDesk() {
 function DrawArea() {
     const { seat, setSeat } = useContext(SeatContext)
     return (
-        <div className="w-4/5 m-2 ">
-            <table className="w-full">
-                <tbody className="w-full">
-                    {seat.map((rows) => <DrawTr key={rows[0].id} rows={rows}></DrawTr>)}
-                </tbody>
-            </table>
+        <div className="w-4/5 m-2 draw-area">
+            {seat.map((rows) => <DrawTr key={rows[0].id} rows={rows}></DrawTr>)}
         </div>
     )
 }
 
 function DrawTr(props) {
+    const { seatNum } = useContext(inputDataContext)
     const rows = props.rows
+    useEffect(() => {
+        const seatAreaWidth = document.querySelector('.draw-area').clientWidth
+        const seatAreaHeight = document.querySelector('.draw-area').clientHeight
+        document.documentElement.style.setProperty('--seat-width', (seatAreaWidth / seatNum.rowNum) + 'px')
+        document.documentElement.style.setProperty('--seat-height', (seatAreaHeight / seatNum.columnNum) + 'px')
+
+    })
     return (
-        <tr className="h-24">
+        <div className="flex h-24 draw-area-tr">
             {rows.map(value =>
-                <td key={value.id} className="">
-                    <div className="w-full h-24 border-2  rounded-2xl flex items-center justify-center">{value.name}</div>
-                </td>
+                <div key={value.id} className="draw-area-td border-2 rounded-2xl text-center">
+                    {value.name}
+                </div>
             )}
-        </tr>
+        </div>
     )
 }
 
 function OptionArea() {
-    const inputDataValue = useContext(inputDataContext)
+    const { seatNum } = useContext(inputDataContext)
+    const { seat, setSeat } = useContext(SeatContext)
+    function updateSeat() {
+        let firstSeatValue = []
+        let firstSeatValueSave = []
+        for (let i = 0; i < seatNum.columnNum; i++) {
+            for (let j = 0; j < seatNum.rowNum; j++) {
+                firstSeatValueSave.push({ id: (seatNum.columnNum * i) + j, name: 'name', row: i, column: j })
+            }
+            firstSeatValue.push(firstSeatValueSave)
+            firstSeatValueSave = []
+        }
+        setSeat(firstSeatValue)
+    }
+
+    function updateRowNum(e) {
+        seatNum.setRowNum(e.target.value)
+        updateSeat()
+    }
+    function updateColumnNum(e) {
+        seatNum.setColumnNum(e.target.value)
+        updateSeat()
+    }
     return (
         <div className="flex w-4/5 h-28 items-center justify-around">
 
@@ -58,24 +85,24 @@ function OptionArea() {
             <div className="flex flex-col justify-around h-20">
                 <label className="">
                     列:
-                    {/* <input type="number" min="1" max="1000" value={seatNum.rowNum} onChange={e => seatNum.setRowNum(e.target.value)} className="
+                    <input type="number" min="1" max="1000" value={seatNum.rowNum} onChange={e => updateRowNum(e)} className="
                     bg-blue-100
                     rounded-md
                     text-center
                     ml-2
                     w-16
-                    "></input> */}
+                    "></input>
                 </label>
 
                 <label className="">
                     行:
-                    {/* <input type="number" min="1" max="1000" value={seatNum.columnNum} onChange={e => seatNum.setColumnNum(e.target.value)} className="
+                    <input type="number" min="1" max="1000" value={seatNum.columnNum} onChange={e => updateColumnNum(e)} className="
                     bg-blue-100
                     rounded-md
                     text-center
                     ml-2
                     w-16
-                    "></input> */}
+                    "></input>
                 </label>
             </div>
         </div>
