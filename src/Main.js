@@ -23,57 +23,71 @@ function TeacherDesk() {
 
 function DrawArea() {
     const { seat, setSeat } = useContext(SeatContext)
+    const { seatNum } = useContext(inputDataContext)
+    useEffect(() => {
+
+        let updateSeatValue = []
+        let updateSeatValueSave = []
+        for (let i = 0; i < seatNum.columnNum; i++) {
+            for (let j = 0; j < seatNum.rowNum; j++) {
+                updateSeatValueSave.push({ id: (seatNum.columnNum * i) + j, name: 'name', number: 0, sex: 'M', row: i, column: j, top: 0, left: 0 })
+            }
+            updateSeatValue.push(updateSeatValueSave)
+            updateSeatValueSave = []
+        }
+
+        const seatAreaWidth = document.querySelector('.draw-area').clientWidth
+        const seatAreaHeight = document.querySelector('.draw-area').clientHeight
+        document.documentElement.style.setProperty('--seat-width', (seatAreaWidth / seatNum.rowNum) + 'px')
+        document.documentElement.style.setProperty('--seat-height', (seatAreaHeight / seatNum.columnNum) + 'px')
+
+        updateSeatValue.forEach((rows) => {
+            rows.forEach((value) => {
+                value.top = (seatAreaHeight / seatNum.columnNum) * value.row
+                value.left = (seatAreaWidth / seatNum.rowNum) * value.column
+            })
+        })
+
+        setSeat(updateSeatValue)
+
+    }, [seatNum.rowNum, seatNum.columnNum])
+
+    useEffect(() => {
+
+    }, [seat])
     return (
-        <div className="w-4/5 m-2 draw-area">
+        <div className=" m-2 draw-area relative">
             {seat.map((rows) => <DrawTr key={rows[0].id} rows={rows}></DrawTr>)}
         </div>
     )
 }
 
 function DrawTr(props) {
-    const { seatNum } = useContext(inputDataContext)
     const rows = props.rows
-    useEffect(() => {
-        const seatAreaWidth = document.querySelector('.draw-area').clientWidth
-        const seatAreaHeight = document.querySelector('.draw-area').clientHeight
-        document.documentElement.style.setProperty('--seat-width', (seatAreaWidth / seatNum.rowNum) + 'px')
-        document.documentElement.style.setProperty('--seat-height', (seatAreaHeight / seatNum.columnNum) + 'px')
 
+    useEffect(() => {
     })
     return (
-        <div className="flex h-24 draw-area-tr">
+        <>
             {rows.map(value =>
-                <div key={value.id} className="draw-area-td border-2 rounded-2xl text-center">
-                    {value.name}
+                <div key={value.id} className="draw-area-td " id={'seat-' + value.id} style={{ top: value.top + 'px', left: value.left + 'px' }}>
+                    <span>{value.number}</span>
+                    <span>{value.name}</span>
                 </div>
-            )}
-        </div>
+            )
+            }
+        </>
     )
 }
 
 function OptionArea() {
-    const { seatNum } = useContext(inputDataContext)
-    const { seat, setSeat } = useContext(SeatContext)
-    function updateSeat() {
-        let firstSeatValue = []
-        let firstSeatValueSave = []
-        for (let i = 0; i < seatNum.columnNum; i++) {
-            for (let j = 0; j < seatNum.rowNum; j++) {
-                firstSeatValueSave.push({ id: (seatNum.columnNum * i) + j, name: 'name', row: i, column: j })
-            }
-            firstSeatValue.push(firstSeatValueSave)
-            firstSeatValueSave = []
-        }
-        setSeat(firstSeatValue)
-    }
+    const { seatNum, isShow } = useContext(inputDataContext)
 
     function updateRowNum(e) {
         seatNum.setRowNum(e.target.value)
-        updateSeat()
     }
     function updateColumnNum(e) {
         seatNum.setColumnNum(e.target.value)
-        updateSeat()
     }
     return (
         <div className="flex w-4/5 h-28 items-center justify-around">
@@ -85,7 +99,7 @@ function OptionArea() {
             <div className="flex flex-col justify-around h-20">
                 <label className="">
                     列:
-                    <input type="number" min="1" max="1000" value={seatNum.rowNum} onChange={e => updateRowNum(e)} className="
+                    <input type="number" min="1" max="50" value={seatNum.rowNum} onChange={e => updateRowNum(e)} className="
                     bg-blue-100
                     rounded-md
                     text-center
@@ -96,13 +110,45 @@ function OptionArea() {
 
                 <label className="">
                     行:
-                    <input type="number" min="1" max="1000" value={seatNum.columnNum} onChange={e => updateColumnNum(e)} className="
+                    <input type="number" min="1" max="50" value={seatNum.columnNum} onChange={e => updateColumnNum(e)} className="
                     bg-blue-100
                     rounded-md
                     text-center
                     ml-2
                     w-16
                     "></input>
+                </label>
+            </div>
+            <div className="flex flex-col justify-around h-20">
+                <label className="">
+                    <input type="checkbox" onClick={() => { isShow.setIsShowNumber(!isShow.isShowNumber) }} className="
+                    bg-blue-100
+                    rounded-md
+                    text-center
+                    ml-2
+                    w-8
+                    "></input>
+                    番号の非表示
+                </label>
+                <label className="">
+                    <input type="checkbox" onClick={() => { isShow.setIsShowName(!isShow.isShowName) }} className="
+                    bg-blue-100
+                    rounded-md
+                    text-center
+                    ml-2
+                    w-8
+                    "></input>
+                    名前の非表示
+                </label>
+                <label className="">
+                    <input type="checkbox" checked onClick={() => { isShow.setIsShowSex(!isShow.isShowSex) }} className="
+                    bg-blue-100
+                    rounded-md
+                    text-center
+                    ml-2
+                    w-8
+                    "></input>
+                    性別の非表示
                 </label>
             </div>
         </div>

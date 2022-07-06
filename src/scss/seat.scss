@@ -4,7 +4,22 @@
     --background-mode: white;
 }
 
-.draw-area-td {
-    width: var(--seat-width);
-    height: var(--seat-height);
+.draw-area {
+    width: 90vw;
+    height: 70vh;
+
+    &-td {
+        width: var(--seat-width);
+        height: var(--seat-height);
+        top: 0px;
+        left: 0px;
+        transition: all 1s;
+        position: absolute;
+        border-width: 2px;
+        border-radius: 1rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
 }

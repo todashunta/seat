@@ -24,14 +24,27 @@ function Seat() {
     }
     const [rowNum, setRowNum] = useState(4)
     const [columnNum, setColumnNum] = useState(4)
+    const [isShowNumber, setIsShowNumber] = useState(true)
+    const [isShowName, setIsShowName] = useState(true)
+    const [isShowSex, setIsShowSex] = useState('M')
     const inputDataValue = {
         seatNum: {
             rowNum,
             setRowNum,
             columnNum,
             setColumnNum
+        },
+        isShow: {
+            isShowNumber,
+            setIsShowNumber,
+            isShowName,
+            setIsShowName,
+            isShowSex,
+            setIsShowSex,
         }
     }
+
+
     return (
         <div>
             <SeatContext.Provider value={seatValue}>
