@@ -24,9 +24,9 @@ function Seat() {
     }
     const [rowNum, setRowNum] = useState(4)
     const [columnNum, setColumnNum] = useState(4)
-    const [isShowNumber, setIsShowNumber] = useState(true)
-    const [isShowName, setIsShowName] = useState(true)
-    const [isShowSex, setIsShowSex] = useState('M')
+    const [number, setNumber] = useState(true)
+    const [name, setName] = useState(true)
+    const [sex, setSex] = useState(false)
     const inputDataValue = {
         seatNum: {
             rowNum,
@@ -35,12 +35,12 @@ function Seat() {
             setColumnNum
         },
         isShow: {
-            isShowNumber,
-            setIsShowNumber,
-            isShowName,
-            setIsShowName,
-            isShowSex,
-            setIsShowSex,
+            number,
+            setNumber,
+            name,
+            setName,
+            sex,
+            setSex,
         }
     }
 

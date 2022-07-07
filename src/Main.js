@@ -45,6 +45,7 @@ function DrawArea() {
             rows.forEach((value) => {
                 value.top = (seatAreaHeight / seatNum.columnNum) * value.row
                 value.left = (seatAreaWidth / seatNum.rowNum) * value.column
+                value.number = value.id + 1
             })
         })
 
@@ -52,9 +53,6 @@ function DrawArea() {
 
     }, [seatNum.rowNum, seatNum.columnNum])
 
-    useEffect(() => {
-
-    }, [seat])
     return (
         <div className=" m-2 draw-area relative">
             {seat.map((rows) => <DrawTr key={rows[0].id} rows={rows}></DrawTr>)}
@@ -63,16 +61,17 @@ function DrawArea() {
 }
 
 function DrawTr(props) {
+    const { seatNum, isShow } = useContext(inputDataContext)
     const rows = props.rows
 
-    useEffect(() => {
-    })
     return (
         <>
             {rows.map(value =>
                 <div key={value.id} className="draw-area-td " id={'seat-' + value.id} style={{ top: value.top + 'px', left: value.left + 'px' }}>
-                    <span>{value.number}</span>
-                    <span>{value.name}</span>
+                    {(isShow.number) && <span>{value.number}</span>}
+                    {(isShow.name) && <span>{value.name}</span>}
+                    {(isShow.sex) && <span>{value.sex}</span>}
+
                 </div>
             )
             }
@@ -121,7 +120,7 @@ function OptionArea() {
             </div>
             <div className="flex flex-col justify-around h-20">
                 <label className="">
-                    <input type="checkbox" onClick={() => { isShow.setIsShowNumber(!isShow.isShowNumber) }} className="
+                    <input type="checkbox" checked={!isShow.number} onChange={() => { isShow.setNumber(!isShow.number) }} className="
                     bg-blue-100
                     rounded-md
                     text-center
@@ -131,7 +130,7 @@ function OptionArea() {
                     番号の非表示
                 </label>
                 <label className="">
-                    <input type="checkbox" onClick={() => { isShow.setIsShowName(!isShow.isShowName) }} className="
+                    <input type="checkbox" checked={!isShow.name} onChange={() => { isShow.setName(!isShow.name) }} className="
                     bg-blue-100
                     rounded-md
                     text-center
@@ -141,7 +140,7 @@ function OptionArea() {
                     名前の非表示
                 </label>
                 <label className="">
-                    <input type="checkbox" checked onClick={() => { isShow.setIsShowSex(!isShow.isShowSex) }} className="
+                    <input type="checkbox" checked={!isShow.sex} onChange={() => { isShow.setSex(!isShow.sex) }} className="
                     bg-blue-100
                     rounded-md
                     text-center
