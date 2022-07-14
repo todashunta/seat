@@ -17,10 +17,10 @@ for (let i = 0; i < 4; i++) {
     firstSeatValueSave = []
 }
 function Seat() {
-    const [seat, setSeat] = useState(firstSeatValue)
-    const seatValue = {
-        seat,
-        setSeat
+    const [seats, setSeats] = useState(firstSeatValue)
+    const seatsValue = {
+        seats,
+        setSeats
     }
     const [rowNum, setRowNum] = useState(4)
     const [columnNum, setColumnNum] = useState(4)
@@ -47,7 +47,7 @@ function Seat() {
 
     return (
         <div>
-            <SeatContext.Provider value={seatValue}>
+            <SeatContext.Provider value={seatsValue}>
                 <inputDataContext.Provider value={inputDataValue}>
                     <Header />
                     <Main />
