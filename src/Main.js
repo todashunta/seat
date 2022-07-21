@@ -131,14 +131,6 @@ function OptionArea() {
         })
         shuffleSeatArray.sort(() => Math.random() - 0.5);
 
-        shuffleSeatArray.forEach((seat, index) => {
-            seat.id = index
-            seat.column = index % seatNum.columnNum
-            // seat.row = index % seatNum.rowNum
-            console.log(seat.row, seat.column)
-            seat.setPosition(seatNum.rowNum, seatNum.columnNum)
-            shuffleSeatArray[index] = seat
-        })
 
         for (let i = 0; i < seatNum.rowNum; i++) {
             let newSeatRow = []
@@ -147,6 +139,15 @@ function OptionArea() {
             }
             shuffledSeat.push(newSeatRow)
         }
+
+        shuffledSeat.forEach((row, i) => {
+            row.forEach((seat, j) => {
+                seat.id = i * seatNum.columnNum + j
+                seat.column = j
+                seat.row = i
+                seat.setPosition(seatNum.rowNum, seatNum.columnNum)
+            })
+        })
         console.log(shuffledSeat)
         return shuffledSeat
     }
@@ -164,7 +165,7 @@ function OptionArea() {
             <div className="flex flex-col justify-around h-20">
                 <label className="">
                     列:
-                    <input type="number" min="1" max="50" value={seatNum.rowNum} onChange={e => updateRowNum(e)} className="
+                    <input type="number" min="1" max="30" value={seatNum.rowNum} onChange={e => updateRowNum(e)} className="
                     bg-blue-100
                     rounded-md
                     text-center
@@ -175,7 +176,7 @@ function OptionArea() {
 
                 <label className="">
                     行:
-                    <input type="number" min="1" max="50" value={seatNum.columnNum} onChange={e => updateColumnNum(e)} className="
+                    <input type="number" min="1" max="30" value={seatNum.columnNum} onChange={e => updateColumnNum(e)} className="
                     bg-blue-100
                     rounded-md
                     text-center
